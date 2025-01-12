@@ -19,24 +19,32 @@ class RobotMovement:
     def forward(self):
         self.robot.set_dir_servo_angle(0)
         self.robot.forward(80)
+        sleep(0.5)
+        self.robot.forward(0)
 
     def backward(self):
         self.robot.set_dir_servo_angle(0)
         self.robot.backward(80)
+        sleep(0.5)
+        self.robot.forward(0)
     
     def left(self):
         self.robot.set_dir_servo_angle(-30)
         self.robot.forward(80)
+        sleep(0.5)
+        self.robot.forward(0)
 
     def right(self):
         self.robot.set_dir_servo_angle(30)
-        self.robot.forward(80)  
+        self.robot.forward(80)
+        sleep(0.5)
+        self.robot.forward(0)
     
     def head_up(self):
         self.tilt_angle+=5
         if self.tilt_angle>30:
             self.tilt_angle=30
-        self.robot.set_cam_tilt_angle(self.tilt_angle) 
+        self.robot.set_cam_tilt_angle(self.tilt_angle)
 
     def head_down(self):
         self.tilt_angle-=5
@@ -57,6 +65,7 @@ class RobotMovement:
         self.robot.set_cam_pan_angle(self.pan_angle)
 
     def stop(self):
+        self.robot.forward(0)
         self.robot.set_cam_tilt_angle(0)
         self.robot.set_cam_pan_angle(0)  
         self.robot.set_dir_servo_angle(0)  

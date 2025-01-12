@@ -101,11 +101,11 @@ if __name__ == "__main__":
         key = key.lower()
         if key in('123'): 
             if '1' == key:
-                move_options()
+                move_options_cli()
             elif '2' == key:
-                sound_options(music, tts) 
+                sound_options_cli(music, tts) 
             elif '3' == key:
-                camera_options() 
+                camera_options_cli() 
             show_main_menu()                     
             sleep(0.5)
         
