@@ -3,7 +3,7 @@ from time import sleep
 from robot_hat import Music,TTS
 import readchar
 from os import geteuid
-from robot import RobotMovement, RobotSound, RobotCamera
+from robot import RobotMovement, RobotSoundOut, RobotCamera
 from menu import show_main_menu, show_move_menu, show_camera_menu, show_sound_menu
 
 if geteuid() != 0:
@@ -73,7 +73,7 @@ def camera_options_cli():
         sleep(0.5)
 
 def sound_options_cli(music: Music, tts: TTS):
-    robot = RobotSound(music, tts)
+    robot = RobotSoundOut(music, tts)
     while True:
         show_sound_menu()
         key = readchar.readkey()

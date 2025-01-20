@@ -71,7 +71,7 @@ class RobotMovement:
         self.robot.set_dir_servo_angle(0)  
         self.robot.stop()
 
-class RobotSound:
+class RobotSoundOut:
     music = None
     tts = None
     flag_bgm = False
@@ -110,6 +110,9 @@ class RobotSound:
                 break
             else:
                 sentence += char
+        self.speak(sentence)
+    
+    def speak(self, sentence:str):
         self.tts.say(sentence)
     
     def stop_music(self):
@@ -206,3 +209,25 @@ class RobotCamera:
             # wait for thread to end
             self.qrcode_thread.join()
             print('QRcode Detect: close')
+    
+    def close(self):
+        self.stop()
+        Vilib.camera_close()
+
+class RobotSoundIn:
+    def __init__(self):
+        pass
+
+    def parse_instructions(self):
+        pass
+
+
+
+
+class RobotAI:
+    def __init__(self):
+        pass
+
+    def process_instructions(self):
+        pass
+
