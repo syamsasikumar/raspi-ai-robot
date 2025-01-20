@@ -9,6 +9,8 @@ class RobotServer(RobotServicer):
     def __init__(self):
         music = Music()
         tts = TTS()
+        music.music_set_volume(20)
+        tts.lang("en-US")
         self.robot_movement = RobotMovement()
         self.robot_sound_out = RobotSoundOut(music, tts)
     
@@ -34,8 +36,9 @@ class RobotServer(RobotServicer):
         return RobotReply(reply="action performed")
 
     def SayMessage(self, request, context):
-        message = ''.join(request.message)
-        self.robot_sound_out.speak(message)
+        message = request.message
+        print(''.join(message))
+        self.robot_sound_out.speak(str(''.join(message)))
         # todo
         return RobotReply(reply="message spoken")
     
