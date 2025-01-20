@@ -1,0 +1,11 @@
+grpcio==1.69.0
+numpy==1.24.4
+openai==1.59.9
+openai_whisper==20240930
+protobuf==5.29.3
+python-dotenv==1.0.1
+readchar==4.2.1
+robot_hat==1.7.1
+SpeechRecognition==3.10.4
+torch==2.2.2
+vilib==1.0.0

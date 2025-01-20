@@ -214,15 +214,6 @@ class RobotCamera:
         self.stop()
         Vilib.camera_close()
 
-class RobotSoundIn:
-    def __init__(self):
-        pass
-
-    def parse_instructions(self):
-        pass
-
-
-
 
 class RobotAI:
     def __init__(self):

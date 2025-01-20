@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+// definitions for rpc calls to robot
+service Robot {
+  // actions for robot to perform
+  rpc PerformAction (ActionRequest) returns (RobotReply) {}
+  // message for robot to speak
+  rpc SayMessage (MessageRequest) returns (RobotReply) {}
+}
+
+message ActionRequest {
+    repeated string actions = 1;
+}
+
+message MessageRequest {
+    repeated string message = 1;
+}
+
+message RobotReply {
+    string reply = 1;
+}
+
+
+
