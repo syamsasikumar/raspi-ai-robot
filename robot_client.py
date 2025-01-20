@@ -1,7 +1,8 @@
-import sys
-from robot_pb2_grpc import RobotStub
-from robot_pb2 import ActionRequest, MessageRequest
+from rpc.robot_pb2_grpc import RobotStub
+from rpc.robot_pb2 import ActionRequest, MessageRequest
+from dotenv import load_dotenv
 import grpc
+import os
 
 class RobotClient():
     def __init__(self, channel):
@@ -21,3 +22,9 @@ class RobotClient():
             print(response.reply)
             return response.reply
 
+if __name__ == "__main__":
+    load_dotenv()
+    rpc_channel = os.getenv("RPC_CHANNEL")
+    print(rpc_channel)
+    robot_client = RobotClient(rpc_channel)
+    robot_client.say_message("hello")

@@ -1,13 +1,12 @@
 import speech_recognition as sr
 import whisper
 import os
-import sys
 
 from queue import Queue
 from openai import OpenAI
 from dotenv import load_dotenv
 from ai import Transcriber, TranscriptionProcessor, MessageHandler, ActionHandler
-from rpc.robot_client import RobotClient
+from robot_client import RobotClient
   
 def main():
     print("initializing..")

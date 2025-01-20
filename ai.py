@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from queue import Queue
 from time import sleep
 from threading import Thread, Event as ThreadingEvent
-from rpc.robot_client import RobotClient
+from robot_client import RobotClient
 from openai import OpenAI
 from speech_recognition import Microphone, Recognizer
 

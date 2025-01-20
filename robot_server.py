@@ -1,5 +1,5 @@
-from robot_pb2_grpc import RobotServicer, add_RobotServicer_to_server
-from robot_pb2 import RobotReply
+from rpc.robot_pb2_grpc import RobotServicer, add_RobotServicer_to_server
+from rpc.robot_pb2 import RobotReply
 from concurrent import futures
 import grpc
 
@@ -24,6 +24,6 @@ if __name__ == "__main__":
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     robot_server = RobotServer()
     add_RobotServicer_to_server(robot_server, server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('0.0.0.0:50051')
     server.start()
     server.wait_for_termination() 
