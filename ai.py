@@ -135,8 +135,8 @@ class TranscriptionProcessor(Thread):
                 fetched_transcription = self.transcription_queue.get()
                 print("fetching transcription..")
                 print(fetched_transcription)
-                self.converse_with_ai(fetched_transcription)
                 self.transcription_queue.task_done()
+                self.converse_with_ai(fetched_transcription)
             else:
                 sleep(0.01)
     
@@ -195,9 +195,9 @@ class ActionHandler(Thread):
                 fetched_actions = self.action_queue.get()
                 print("fetching action..")
                 print(fetched_actions)
+                self.action_queue.task_done()
                 response = self.robot_client.perform_action(fetched_actions)
                 print("recieved response" + response)
-                self.action_queue.task_done()
             else:
                 sleep(0.01)
     
@@ -217,10 +217,12 @@ class MessageHandler(Thread):
             if not self.message_queue.empty():
                 fetched_message = self.message_queue.get()
                 print("fetching message..")
+                # robot stt is very sensitive to special characters
+                fetched_message = fetched_message.encode('ascii', 'ignore').decode('ascii').replace("'", "")
                 print(fetched_message)
-                response = self.robot_client.say_message(str(fetched_message))
-                print("recieved response" + response)
                 self.message_queue.task_done()
+                response = self.robot_client.say_message(fetched_message)
+                print("recieved response" + response)
             else:
                 sleep(0.01)
 

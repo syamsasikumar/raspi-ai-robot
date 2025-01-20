@@ -27,4 +27,4 @@ if __name__ == "__main__":
     rpc_channel = os.getenv("RPC_CHANNEL")
     print(rpc_channel)
     robot_client = RobotClient(rpc_channel)
-    robot_client.say_message("hello")
+    robot_client.say_message("Hello there! Beep boop! Im Max, the little robot ready to roll into action! How can I assist you today?")

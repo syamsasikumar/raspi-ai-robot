@@ -9,7 +9,7 @@ class RobotServer(RobotServicer):
     def __init__(self):
         music = Music()
         tts = TTS()
-        music.music_set_volume(20)
+        music.music_set_volume(80)
         tts.lang("en-US")
         self.robot_movement = RobotMovement()
         self.robot_sound_out = RobotSoundOut(music, tts)
