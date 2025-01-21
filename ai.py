@@ -11,22 +11,16 @@ from threading import Thread, Event as ThreadingEvent
 from robot_client import RobotClient
 from openai import OpenAI
 from speech_recognition import Microphone, Recognizer
+from dotenv import load_dotenv
 
 # transcribes speech to text using an audio model (whisper)
 class Transcriber(Thread):
-    audio_model = None
-    recorder = None
-    source = None
     transcribe_queue = Queue()
     transcription = ['']
-    completed_transcriptions = None
-    record_timeout = 2
-    phrase_timeout = 5
     stop_listening_callback = None
-    wake_word = "max"
     should_listen = True
 
-    def __init__(self, completed_transcriptions : Queue , audio_model, recorder: Recognizer, source: Microphone, record_timeout : int, phrase_timeout : int, wake_word : str):
+    def __init__(self, completed_transcriptions : Queue , audio_model, recorder: Recognizer, source: Microphone, record_timeout : int, phrase_timeout : int, wake_word : str, stop_phrase : str):
         Thread.__init__(self)
         self.completed_transcriptions = completed_transcriptions
         self.audio_model = audio_model
@@ -35,7 +29,7 @@ class Transcriber(Thread):
         self.phrase_timeout = phrase_timeout
         self.source = source
         self.wake_word = wake_word
-        self.stop_phrase = self.wake_word + " stop"
+        self.stop_phrase = stop_phrase
         with self.source:
             recorder.adjust_for_ambient_noise(self.source)
 
@@ -228,4 +222,3 @@ class MessageHandler(Thread):
 
     def stop(self):
         self.stop_event.set()
-    

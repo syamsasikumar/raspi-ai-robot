@@ -13,6 +13,7 @@ class RobotServer(RobotServicer):
         tts.lang("en-US")
         self.robot_movement = RobotMovement()
         self.robot_sound_out = RobotSoundOut(music, tts)
+        print("RobotServer initialized")
     
     def PerformAction(self, request, context):
         actions = request.actions
