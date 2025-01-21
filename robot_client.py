@@ -4,13 +4,15 @@ import grpc
 import os
 from dotenv import load_dotenv
 
+
 def get_rpc_channel():
     load_dotenv()
     if os.getenv("RPC_SERVER_MODE") == "local":
         return os.getenv("RPC_LOCAL_CHANNEL")
     return os.getenv("RPC_CHANNEL")
 
-class RobotClient():
+
+class RobotClient:
     def __init__(self, channel):
         self.channel = channel
 
@@ -20,7 +22,7 @@ class RobotClient():
             response = stub.PerformAction(ActionRequest(actions=actions))
             print(response.reply)
             return response.reply
-    
+
     def say_message(self, message):
         with grpc.insecure_channel(self.channel) as channel:
             stub = RobotStub(channel)
@@ -28,8 +30,11 @@ class RobotClient():
             print(response.reply)
             return response.reply
 
+
 if __name__ == "__main__":
     rpc_channel = get_rpc_channel()
     print(rpc_channel)
     robot_client = RobotClient(rpc_channel)
-    robot_client.say_message("Hello there! Beep boop! Im Max, the little robot ready to roll into action! How can I assist you today?")
+    robot_client.say_message(
+        "Hello there! Beep boop! Im Max, the little robot ready to roll into action! How can I assist you today?"
+    )

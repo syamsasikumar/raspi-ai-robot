@@ -9,34 +9,30 @@ from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import runtime_version as _runtime_version
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 _runtime_version.ValidateProtobufRuntimeVersion(
-    _runtime_version.Domain.PUBLIC,
-    5,
-    29,
-    0,
-    '',
-    'robot.proto'
+    _runtime_version.Domain.PUBLIC, 5, 29, 0, "", "robot.proto"
 )
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-
-
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0brobot.proto\" \n\rActionRequest\x12\x0f\n\x07\x61\x63tions\x18\x01 \x03(\t\"!\n\x0eMessageRequest\x12\x0f\n\x07message\x18\x01 \x03(\t\"\x1b\n\nRobotReply\x12\r\n\x05reply\x18\x01 \x01(\t2e\n\x05Robot\x12.\n\rPerformAction\x12\x0e.ActionRequest\x1a\x0b.RobotReply\"\x00\x12,\n\nSayMessage\x12\x0f.MessageRequest\x1a\x0b.RobotReply\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b'\n\x0brobot.proto" \n\rActionRequest\x12\x0f\n\x07\x61\x63tions\x18\x01 \x03(\t"!\n\x0eMessageRequest\x12\x0f\n\x07message\x18\x01 \x03(\t"\x1b\n\nRobotReply\x12\r\n\x05reply\x18\x01 \x01(\t2e\n\x05Robot\x12.\n\rPerformAction\x12\x0e.ActionRequest\x1a\x0b.RobotReply"\x00\x12,\n\nSayMessage\x12\x0f.MessageRequest\x1a\x0b.RobotReply"\x00\x62\x06proto3'
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'robot_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "robot_pb2", _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
-  DESCRIPTOR._loaded_options = None
-  _globals['_ACTIONREQUEST']._serialized_start=15
-  _globals['_ACTIONREQUEST']._serialized_end=47
-  _globals['_MESSAGEREQUEST']._serialized_start=49
-  _globals['_MESSAGEREQUEST']._serialized_end=82
-  _globals['_ROBOTREPLY']._serialized_start=84
-  _globals['_ROBOTREPLY']._serialized_end=111
-  _globals['_ROBOT']._serialized_start=113
-  _globals['_ROBOT']._serialized_end=214
+    DESCRIPTOR._loaded_options = None
+    _globals["_ACTIONREQUEST"]._serialized_start = 15
+    _globals["_ACTIONREQUEST"]._serialized_end = 47
+    _globals["_MESSAGEREQUEST"]._serialized_start = 49
+    _globals["_MESSAGEREQUEST"]._serialized_end = 82
+    _globals["_ROBOTREPLY"]._serialized_start = 84
+    _globals["_ROBOTREPLY"]._serialized_end = 111
+    _globals["_ROBOT"]._serialized_start = 113
+    _globals["_ROBOT"]._serialized_end = 214
 # @@protoc_insertion_point(module_scope)
