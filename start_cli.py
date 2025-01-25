@@ -6,7 +6,7 @@ import readchar
 from dotenv import load_dotenv
 from openai import OpenAI
 from robot_hat import TTS, Music
-from vilib import 
+from vilib import Vilib
 from picamera2 import Picamera2
 
 from ai_helper import AIHelper
@@ -63,7 +63,7 @@ def move_options_cli():
 
 
 def camera_options_cli():
-    robot = RobotCamera()
+    robot = RobotCamera(None)
     while True:
         show_camera_menu()
         # readkey
@@ -88,7 +88,7 @@ def camera_options_cli():
             return
         elif key == "i":
             print("capturing image..")
-            image_path = robot.take_photo()
+            image_path = robot.take_photo_without_picamera()
             print("sending image for processing..")
             print("image path.." + image_path)
             response = ai_helper.converse_with_image("what do you see?", image_path)

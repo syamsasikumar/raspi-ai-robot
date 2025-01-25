@@ -1,12 +1,14 @@
 import os
+import re
 import threading
 from time import localtime, sleep, strftime, time
+from typing import Optional
 
 import readchar
+from picamera2 import Picamera2
 from picarx import Picarx
 from robot_hat import TTS, Music
 from vilib import Vilib
-from picamera2 import Picamera2
 
 from menu import show_sound_menu
 
@@ -175,6 +177,8 @@ class RobotSoundOut:
         self.speak(sentence)
 
     def speak(self, sentence: str):
+        sentence = re.sub(r'[^A-Za-z0-9 ]+', '', sentence)
+        print("sepaking " + sentence)
         self.tts.say(sentence)
 
     def stop_music(self):
@@ -189,10 +193,11 @@ class RobotCamera:
     color_list = ["close", "red", "orange", "yellow", "green", "blue", "purple"]
     qrcode_thread = None
 
-    def __init__(self, camera: Picamera2):
+    def __init__(self, camera: Optional[Picamera2]):
         self.camera = camera
-        self.camera.start()
-        sleep(2)
+        if self.camera is not None:
+            self.camera.start()
+            sleep(2)
 
     def qr_code_detect(self):
         if self.flag_qr_code is True:
@@ -209,6 +214,16 @@ class RobotCamera:
                 break
             sleep(0.5)
         Vilib.qrcode_detect_switch(False)
+
+    def take_photo_without_picamera(self):
+        _time = strftime("%Y-%m-%d-%H-%M-%S", localtime(time()))
+        name = "photo_%s" % _time
+        username = os.getlogin()
+
+        path = f"/home/{username}/Pictures/"
+        Vilib.take_photo(name, path)
+        print("photo save as %s%s.jpg" % (path, name))
+        return path + name + ".jpg"
 
     def take_photo(self):
         _time = strftime("%Y-%m-%d-%H-%M-%S", localtime(time()))
