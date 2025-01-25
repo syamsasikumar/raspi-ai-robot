@@ -4,6 +4,7 @@ from concurrent import futures
 import grpc
 from dotenv import load_dotenv
 from openai import OpenAI
+from picamera2 import Picamera2
 from robot_hat import TTS, Music
 
 from ai_helper import AIHelper
@@ -21,9 +22,10 @@ class RobotServer(RobotServicer):
         tts = TTS()
         music.music_set_volume(80)
         tts.lang("en-US")
+        camera = Picamera2()
         self.robot_movement = RobotMovement()
         self.robot_sound_out = RobotSoundOut(music, tts)
-        self.robot_camera = RobotCamera()
+        self.robot_camera = RobotCamera(camera)
         self.ai_helper = AIHelper(OpenAI(api_key=api_key, timeout=30), assistant_id)
         print("RobotServer initialized")
 

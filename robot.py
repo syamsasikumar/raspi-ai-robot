@@ -6,7 +6,7 @@ import readchar
 from picarx import Picarx
 from robot_hat import TTS, Music
 from vilib import Vilib
-from picamera2 import Picamera2, Preview
+from picamera2 import Picamera2
 
 from menu import show_sound_menu
 
@@ -189,8 +189,10 @@ class RobotCamera:
     color_list = ["close", "red", "orange", "yellow", "green", "blue", "purple"]
     qrcode_thread = None
 
-    def __init__(self):
-        pass
+    def __init__(self, camera: Picamera2):
+        self.camera = camera
+        self.camera.start()
+        sleep(2)
 
     def qr_code_detect(self):
         if self.flag_qr_code is True:
@@ -212,23 +214,9 @@ class RobotCamera:
         _time = strftime("%Y-%m-%d-%H-%M-%S", localtime(time()))
         name = "photo_%s" % _time
         username = os.getlogin()
-
-        path = f"/home/{username}/Pictures/"
-        Vilib.take_photo(name, path)
-        print("photo save as %s%s.jpg" % (path, name))
-        return path + name + ".jpg"
-
-    def take_photo_no_preview(self):
-        picam2 = Picamera2()
-        picam2.start()
-        sleep(2)
-
-        _time = strftime("%Y-%m-%d-%H-%M-%S", localtime(time()))
-        name = "photo_%s" % _time
-        username = os.getlogin()
         path = f"/home/{username}/Pictures/"
         file_name = path + name + ".jpg"
-        picam2.capture_file(file_name)
+        self.camera.capture_file(file_name)
         return file_name
 
     def object_show(self):

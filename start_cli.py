@@ -6,7 +6,8 @@ import readchar
 from dotenv import load_dotenv
 from openai import OpenAI
 from robot_hat import TTS, Music
-from vilib import Vilib
+from vilib import 
+from picamera2 import Picamera2
 
 from ai_helper import AIHelper
 from menu import (show_camera_menu, show_main_menu, show_move_menu,
@@ -20,6 +21,8 @@ if geteuid() != 0:
 
 music = Music()
 tts = TTS()
+
+camera = Picamera2()
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
