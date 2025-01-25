@@ -25,11 +25,12 @@ class AIHelper:
         return self._parse_response(run)
 
     def converse_with_image(self, imput_text: str, image_path: str):
+        print("uploading image..")
         img_file = self.ai_client.files.create(
                     file=open(image_path, "rb"),
                     purpose="vision"
                 )
-
+        print("creating thread..")
         self.ai_client.beta.threads.messages.create(
             thread_id= self.chat_thread.id,
             role="user",
@@ -44,6 +45,7 @@ class AIHelper:
                 }
             ],
         )
+        print("conversing with AI..")
         run = self.ai_client.beta.threads.runs.create_and_poll(
             thread_id=self.chat_thread.id,
             assistant_id=self.assistant_id,

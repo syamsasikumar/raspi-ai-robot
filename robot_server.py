@@ -61,7 +61,9 @@ class RobotServer(RobotServicer):
             self.capture_and_process_image("what do you see in this image?")
 
     def capture_and_process_image(self, message: str):
+        print("capturing image..")
         image_path = self.robot_camera.take_photo()
+        print("sending image for processing..")
         response = self.ai_helper.converse_with_image(message, image_path)
         if "actions" in response:
             print("actions from image.." + str(response["actions"]))

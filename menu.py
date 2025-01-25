@@ -11,6 +11,7 @@ Input key to call the function!
     q: Scan the QR code
     f: Switch ON/OFF face detect
     s: Display detected object information
+    i: Capture image and process with AI
     r: Return to main menu
 """
 
