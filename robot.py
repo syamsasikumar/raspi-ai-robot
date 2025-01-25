@@ -1,12 +1,13 @@
-from picarx import Picarx
-from menu import show_sound_menu
-import readchar
-from robot_hat import Music, TTS
-from vilib import Vilib
-from time import sleep
-from time import sleep, time, strftime, localtime
-import threading
 import os
+import threading
+from time import localtime, sleep, strftime, time
+
+import readchar
+from picarx import Picarx
+from robot_hat import TTS, Music
+from vilib import Vilib
+
+from menu import show_sound_menu
 
 
 class RobotMovement:
@@ -72,6 +73,64 @@ class RobotMovement:
         self.robot.set_dir_servo_angle(0)
         self.robot.stop()
 
+    def rub_hands(self):
+        self.robot.reset()
+        for i in range(5):
+            self.robot.set_dir_servo_angle(-6)
+            sleep(.5)
+            self.robot.set_dir_servo_angle(6)
+            sleep(.5)
+        self.robot.reset()
+
+    def think(self):
+        self.robot.reset()
+
+        for i in range(11):
+            self.robot.set_cam_pan_angle(i*3)
+            self.robot.set_cam_tilt_angle(-i*2)
+            self.robot.set_dir_servo_angle(i*2)
+            sleep(.05)
+        sleep(1)
+        self.robot.set_cam_pan_angle(15)
+        self.robot.set_cam_tilt_angle(-10)
+        self.robot.set_dir_servo_angle(10)
+        sleep(.1)
+        self.robot.reset()
+
+    def shake_head(self):
+        self.robot.stop()
+        self.robot.set_cam_pan_angle(0)
+        self.robot.set_cam_pan_angle(60)
+        sleep(.2)
+        self.robot.set_cam_pan_angle(-50)
+        sleep(.1)
+        self.robot.set_cam_pan_angle(40)
+        sleep(.1)
+        self.robot.set_cam_pan_angle(-30)
+        sleep(.1)
+        self.robot.set_cam_pan_angle(20)
+        sleep(.1)
+        self.robot.set_cam_pan_angle(-10)
+        sleep(.1)
+        self.robot.set_cam_pan_angle(10)
+        sleep(.1)
+        self.robot.set_cam_pan_angle(-5)
+        sleep(.1)
+        self.robot.set_cam_pan_angle(0)
+
+    def nod(self):
+        self.robot.reset()
+        self.robot.set_cam_tilt_angle(0)
+        self.robot.set_cam_tilt_angle(5)
+        sleep(.1)
+        self.robot.set_cam_tilt_angle(-30)
+        sleep(.1)
+        self.robot.set_cam_tilt_angle(5)
+        sleep(.1)
+        self.robot.set_cam_tilt_angle(-30)
+        sleep(.1)
+        self.robot.set_cam_tilt_angle(0)
+
 
 class RobotSoundOut:
     music = None
@@ -133,17 +192,17 @@ class RobotCamera:
         pass
 
     def qr_code_detect(self):
-        if self.qr_code_flag == True:
+        if self.flag_qr_code is True:
             Vilib.qrcode_detect_switch(True)
             print("Waitting for QR code")
 
         text = None
         while True:
             temp = Vilib.detect_obj_parameter["qr_data"]
-            if temp != "None" and temp != text:
+            if temp not in ("None", text):
                 text = temp
                 print("QR code:%s" % text)
-            if self.qr_code_flag == False:
+            if self.flag_qr_code is False:
                 break
             sleep(0.5)
         Vilib.qrcode_detect_switch(False)
@@ -156,6 +215,7 @@ class RobotCamera:
         path = f"/home/{username}/Pictures/"
         Vilib.take_photo(name, path)
         print("photo save as %s%s.jpg" % (path, name))
+        return path + name + ".jpg"
 
     def object_show(self):
         if self.flag_color is True:
@@ -211,13 +271,13 @@ class RobotCamera:
 
     def qrcode_detect_switch(self):
         self.flag_qr_code = not self.flag_qr_code
-        if self.flag_qr_code == True:
-            if self.qrcode_thread == None or not self.qrcode_thread.is_alive():
-                self.qrcode_thread = threading.Thread(target=self.qrcode_detect)
+        if self.flag_qr_code is True:
+            if self.qrcode_thread is None or not self.qrcode_thread.is_alive():
+                self.qrcode_thread = threading.Thread(target=self.qr_code_detect)
                 self.qrcode_thread.daemon = True
                 self.qrcode_thread.start()
         else:
-            if self.qrcode_thread != None and self.qrcode_thread.is_alive():
+            if self.qrcode_thread is not None and self.qrcode_thread.is_alive():
                 # wait for thread to end
                 self.qrcode_thread.join()
                 print("QRcode Detect: close")
@@ -229,7 +289,7 @@ class RobotCamera:
         Vilib.face_detect_switch(False)
         Vilib.color_detect("close")
         Vilib.qrcode_detect_switch(False)
-        if self.qrcode_thread != None and self.qrcode_thread.is_alive():
+        if self.qrcode_thread is not None and self.qrcode_thread.is_alive():
             # wait for thread to end
             self.qrcode_thread.join()
             print("QRcode Detect: close")
@@ -237,11 +297,3 @@ class RobotCamera:
     def close(self):
         self.stop()
         Vilib.camera_close()
-
-
-class RobotAI:
-    def __init__(self):
-        pass
-
-    def process_instructions(self):
-        pass

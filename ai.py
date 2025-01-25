@@ -1,17 +1,20 @@
+import json
+import os
+from datetime import datetime, timedelta
+from queue import Queue
+from threading import Event as ThreadingEvent
+from threading import Thread
+from time import sleep
+
 import numpy as np
 import speech_recognition as sr
 import torch
-import json
-import os
-
-from datetime import datetime, timedelta
-from queue import Queue
-from time import sleep
-from threading import Thread, Event as ThreadingEvent
-from robot_client import RobotClient
+from dotenv import load_dotenv
 from openai import OpenAI
 from speech_recognition import Microphone, Recognizer
-from dotenv import load_dotenv
+
+from ai_helper import AIHelper
+from robot_client import RobotClient
 
 
 # transcribes speech to text using an audio model (whisper)
@@ -145,9 +148,7 @@ class TranscriptionProcessor(Thread):
         Thread.__init__(self)
         self.transcription_queue = transcription_queue
         self.stop_event = ThreadingEvent()
-        self.ai_client = ai_client
-        self.assistant_id = assistant_id
-        self.chat_thread = self.ai_client.beta.threads.create()
+        self.ai_helper = AIHelper(ai_client, assistant_id)
         self.thread_count = 2
         self.message_queue = message_queue
         self.action_queue = action_queue
@@ -160,50 +161,24 @@ class TranscriptionProcessor(Thread):
                 print("fetching transcription..")
                 print(fetched_transcription)
                 self.transcription_queue.task_done()
-                self.converse_with_ai(fetched_transcription)
+                self.fetch_and_queue_ai_response(fetched_transcription)
             else:
                 sleep(0.01)
 
-    def converse_with_ai(self, message: str):
-        print("conversing with AI..")
-        message = self.ai_client.beta.threads.messages.create(
-            thread_id=self.chat_thread.id, role="user", content=message
-        )
-        run = self.ai_client.beta.threads.runs.create_and_poll(
-            thread_id=self.chat_thread.id,
-            assistant_id=self.assistant_id,
-        )
-        if run.status == "completed":
-            messages = self.ai_client.beta.threads.messages.list(
-                thread_id=self.chat_thread.id
+    def fetch_and_queue_ai_response(self, message: str):
+        response = self.ai_helper.converse_with_text(message)
+        if "actions" in response:
+            print("saying.." + str(response["actions"]))
+            self.action_queue.put(response["actions"])
+        if "answer" in response:
+            self.message_queue.put(response["answer"])
+        if (
+            "actions" not in response
+            and "answer" not in response
+        ):
+            print(
+                "no answer or action found in response " + response
             )
-            print("all messages..")
-            print(messages)
-
-            for message in messages.data:
-                if message.role == "assistant":
-                    for block in message.content:
-                        if block.type == "text":
-                            value = block.text.value
-                            print("message from AI..")
-                            print(value)
-                            try:
-                                response = json.loads(value)
-                                if "actions" in response:
-                                    print("saying.." + str(response["actions"]))
-                                    self.action_queue.put(response["actions"])
-                                if "answer" in response:
-                                    self.message_queue.put(response["answer"])
-                                if (
-                                    "actions" not in response
-                                    and "answer" not in response
-                                ):
-                                    print(
-                                        "no answer or action found in response " + value
-                                    )
-                            except Exception as e:
-                                print("cannot parse AI response :" + value)
-                    break
 
     def stop(self):
         self.stop_event.set()

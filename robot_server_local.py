@@ -1,8 +1,10 @@
-from rpc.robot_pb2_grpc import RobotServicer, add_RobotServicer_to_server
-from rpc.robot_pb2 import RobotReply
-from concurrent import futures
-import grpc
 import os
+from concurrent import futures
+
+import grpc
+
+from rpc.robot_pb2 import RobotReply
+from rpc.robot_pb2_grpc import RobotServicer, add_RobotServicer_to_server
 
 
 class RobotServer(RobotServicer):

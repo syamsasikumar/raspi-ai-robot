@@ -1,10 +1,13 @@
-from vilib import Vilib
-from time import sleep
-from robot_hat import Music, TTS
-import readchar
 from os import geteuid
-from robot import RobotMovement, RobotSoundOut, RobotCamera
-from menu import show_main_menu, show_move_menu, show_camera_menu, show_sound_menu
+from time import sleep
+
+import readchar
+from robot_hat import TTS, Music
+from vilib import Vilib
+
+from menu import (show_camera_menu, show_main_menu, show_move_menu,
+                  show_sound_menu)
+from robot import RobotCamera, RobotMovement, RobotSoundOut
 
 if geteuid() != 0:
     print(
@@ -20,8 +23,7 @@ def move_options_cli():
         robot = RobotMovement()
         while True:
             show_move_menu()
-            key = readchar.readkey()
-            key = key.lower()
+            key = readchar.readkey().lower()
             if key in ("wsadikjl"):
                 if "w" == key:
                     robot.forward()
@@ -54,8 +56,7 @@ def camera_options_cli():
     while True:
         show_camera_menu()
         # readkey
-        key = readchar.readkey()
-        key = key.lower()
+        key = readchar.readkey().lower()
         # take photo
         if key == "p":
             robot.take_photo()
@@ -81,8 +82,7 @@ def sound_options_cli(music: Music, tts: TTS):
     robot = RobotSoundOut(music, tts)
     while True:
         show_sound_menu()
-        key = readchar.readkey()
-        key = key.lower()
+        key = readchar.readkey().lower()
         if key == "q":
             robot.play_music()
         elif key == readchar.key.SPACE:
