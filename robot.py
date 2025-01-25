@@ -6,6 +6,7 @@ import readchar
 from picarx import Picarx
 from robot_hat import TTS, Music
 from vilib import Vilib
+from picamera2 import Picamera2, Preview
 
 from menu import show_sound_menu
 
@@ -216,6 +217,19 @@ class RobotCamera:
         Vilib.take_photo(name, path)
         print("photo save as %s%s.jpg" % (path, name))
         return path + name + ".jpg"
+
+    def take_photo_no_preview(self):
+        picam2 = Picamera2()
+        picam2.start()
+        sleep(2)
+
+        _time = strftime("%Y-%m-%d-%H-%M-%S", localtime(time()))
+        name = "photo_%s" % _time
+        username = os.getlogin()
+        path = f"/home/{username}/Pictures/"
+        file_name = path + name + ".jpg"
+        picam2.capture_file(file_name)
+        return file_name
 
     def object_show(self):
         if self.flag_color is True:
