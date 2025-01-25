@@ -1,11 +1,13 @@
+import os
+from queue import Queue
+
 import speech_recognition as sr
 import whisper
-import os
-
-from queue import Queue
-from openai import OpenAI
 from dotenv import load_dotenv
-from ai import Transcriber, TranscriptionProcessor, MessageHandler, ActionHandler
+from openai import OpenAI
+
+from ai import (ActionHandler, MessageHandler, Transcriber,
+                TranscriptionProcessor)
 from robot_client import RobotClient
 
 
