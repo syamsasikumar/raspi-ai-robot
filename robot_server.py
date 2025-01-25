@@ -60,9 +60,9 @@ class RobotServer(RobotServicer):
         elif action == "honk":
             self.robot_sound_out.play_sound_effect()
         elif action == "see" and not ignore_see:
-            self.capture_and_process_image("what do you see in this image?")
+            self._capture_and_process_image("what do you see in this image?")
 
-    def capture_and_process_image(self, message: str):
+    def _capture_and_process_image(self, message: str):
         print("capturing image..")
         image_path = self.robot_camera.take_photo()
         print("sending image for processing..")
