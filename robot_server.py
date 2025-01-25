@@ -44,7 +44,7 @@ class RobotServer(RobotServicer):
         # todo
         return RobotReply(reply="message spoken")
     
-    def _perform_action(self, action):
+    def _perform_action(self, action: str, ignore_see: bool = False):
         if action == "move forward":
             self.robot_movement.forward()
         elif action == "move backward":
@@ -59,7 +59,7 @@ class RobotServer(RobotServicer):
             self.robot_sound_out.stop_music()
         elif action == "honk":
             self.robot_sound_out.play_sound_effect()
-        elif action == "see":
+        elif action == "see" and not ignore_see:
             self.capture_and_process_image("what do you see in this image?")
 
     def capture_and_process_image(self, message: str):
@@ -70,7 +70,7 @@ class RobotServer(RobotServicer):
         if "actions" in response:
             print("actions from image.." + str(response["actions"]))
             for action in response["actions"]:
-                self._perform_action(action)
+                self._perform_action(action, ignore_see=True)
         if "answer" in response:
             print("saying.." + str(response["answer"]))
             self.robot_sound_out.speak(str(response["answer"]))
