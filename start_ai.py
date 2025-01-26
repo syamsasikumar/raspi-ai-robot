@@ -31,7 +31,7 @@ def main():
     audio_model = whisper.load_model("tiny")  # tiny, base, small, medium, large
     print("model loaded..")
 
-    record_timeout = 2  # how real time recording
+    record_timeout = 5  # how real time recording
     phrase_timeout = 3  # empty space between recordings
     # wake word to start processing instructions, instructions without wake word are ignored
     wake_word = os.getenv("WAKE_WORD")
