@@ -5,7 +5,7 @@ from time import sleep
 import readchar
 from dotenv import load_dotenv
 from openai import OpenAI
-from robot_hat import TTS, Music
+from robot_hat import Music
 from vilib import Vilib
 
 from ai_helper import AIHelper
@@ -19,12 +19,12 @@ if geteuid() != 0:
     )
 
 music = Music()
-tts = TTS()
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
-ai_helper = AIHelper(OpenAI(api_key=api_key, timeout=30), assistant_id)
+openai = OpenAI(api_key=api_key, timeout=30)
+ai_helper = AIHelper(openai, assistant_id)
 
 def move_options_cli():
     try:
@@ -100,8 +100,8 @@ def camera_options_cli():
         sleep(0.5)
 
 
-def sound_options_cli(music: Music, tts: TTS):
-    robot = RobotSoundOut(music, tts)
+def sound_options_cli(music: Music):
+    robot = RobotSoundOut(music, openai)
     while True:
         show_sound_menu()
         key = readchar.readkey().lower()
@@ -120,7 +120,6 @@ def sound_options_cli(music: Music, tts: TTS):
 
 if __name__ == "__main__":
     music.music_set_volume(20)
-    tts.lang("en-US")
     Vilib.camera_start(vflip=False, hflip=False)
     Vilib.display(local=True, web=True)
     show_main_menu()
@@ -131,7 +130,7 @@ if __name__ == "__main__":
             if "1" == key:
                 move_options_cli()
             elif "2" == key:
-                sound_options_cli(music, tts)
+                sound_options_cli(music)
             elif "3" == key:
                 camera_options_cli()
             show_main_menu()

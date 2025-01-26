@@ -139,15 +139,12 @@ class RobotMovement:
 
 class RobotSoundOut:
     music = None
-    tts = None
     flag_bgm = False
 
-    def __init__(self, music: Music, tts: TTS, ai_client:Optional[OpenAI]=None):
+    def __init__(self, music: Music, ai_client:OpenAI):
         self.music = music
-        self.tts = tts
-        if ai_client is not None:
-            self.ai_client = ai_client
-            self.player_stream = pyaudio.PyAudio().open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
+        self.ai_client = ai_client
+        self.player_stream = pyaudio.PyAudio().open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
 
 
     def play_music(self):
@@ -180,12 +177,7 @@ class RobotSoundOut:
                 break
             else:
                 sentence += char
-        self.speak(sentence)
-
-    def speak(self, sentence: str):
-        sentence = re.sub(r'[^A-Za-z0-9 ]+', '', sentence)
-        print("sepaking " + sentence)
-        self.tts.say(sentence)
+        self.speak_with_ai(sentence)
 
     def stop_music(self):
         if self.flag_bgm is True:

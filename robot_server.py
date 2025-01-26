@@ -5,7 +5,7 @@ import grpc
 from dotenv import load_dotenv
 from openai import OpenAI
 from picamera2 import Picamera2
-from robot_hat import TTS, Music
+from robot_hat import Music
 
 from ai_helper import AIHelper
 from robot import RobotCamera, RobotMovement, RobotSoundOut
@@ -19,13 +19,12 @@ class RobotServer(RobotServicer):
         api_key = os.getenv("OPENAI_API_KEY")
         assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
         music = Music()
-        tts = TTS()
         music.music_set_volume(80)
-        tts.lang("en-US")
         camera = Picamera2()
-        self.ai_helper = AIHelper(OpenAI(api_key=api_key, timeout=30), assistant_id)
+        openai = OpenAI(api_key=api_key, timeout=30)
+        self.ai_helper = AIHelper(openai, assistant_id)
         self.robot_movement = RobotMovement()
-        self.robot_sound_out = RobotSoundOut(music, tts, self.ai_helper)
+        self.robot_sound_out = RobotSoundOut(music,openai)
         self.robot_camera = RobotCamera(camera)
         print("RobotServer initialized")
 
