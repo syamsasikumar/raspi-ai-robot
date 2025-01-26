@@ -39,7 +39,7 @@ class RobotServer(RobotServicer):
     def SayMessage(self, request, context):
         message = request.message
         print("".join(message))
-        self.robot_sound_out.speak_with_ai(str("".join(message)))
+        self.robot_sound_out.speak_using_ai(str("".join(message)))
         # todo
         return RobotReply(reply="message spoken")
     
@@ -72,7 +72,7 @@ class RobotServer(RobotServicer):
                 self._perform_action(action, ignore_see=True)
         if "answer" in response:
             print("saying.." + str(response["answer"]))
-            self.robot_sound_out.speak_with_ai(str("".join(response["answer"])))
+            self.robot_sound_out.speak_using_ai(str("".join(response["answer"])))
         if "actions" not in response and "answer" not in response:
             print(
                 "no answer or action found in response " + response
