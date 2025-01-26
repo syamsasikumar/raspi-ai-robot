@@ -101,7 +101,7 @@ def camera_options_cli():
 
 
 def sound_options_cli(music: Music):
-    robot = RobotSoundOut(music, openai)
+    robot = RobotSoundOut(music, ai_helper)
     while True:
         show_sound_menu()
         key = readchar.readkey().lower()

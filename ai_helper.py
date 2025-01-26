@@ -1,4 +1,5 @@
 import json
+import pyaudio
 
 from openai import OpenAI
 
@@ -12,6 +13,7 @@ class AIHelper:
         self.ai_client = ai_client
         self.assistant_id = assistant_id
         self.chat_thread = self.ai_client.beta.threads.create()
+        self.player_stream = pyaudio.PyAudio().open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
 
     def converse_with_text(self, imput_text: str):
         print("conversing with AI..")
@@ -73,3 +75,14 @@ class AIHelper:
                                 print("cannot parse AI response :" + value + ":" + e)
                     break
 
+    def speak_with_ai(self, text: str):
+        if self.ai_client is None:
+            raise Exception("client not initialized to speak with AI")
+        with self.ai_client.audio.speech.with_streaming_response.create(
+            model="tts-1",
+            voice="nova",
+            response_format="pcm",
+            input=text,
+        ) as response:
+            for chunk in response.iter_bytes(chunk_size=1024):
+                self.player_stream.write(chunk)

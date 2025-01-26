@@ -9,8 +9,7 @@ from time import sleep
 import numpy as np
 import speech_recognition as sr
 import torch
-from dotenv import load_dotenv
-from openai import OpenAI
+from ai_helper import AIHelper
 from speech_recognition import Microphone, Recognizer
 
 from ai_helper import AIHelper
@@ -134,21 +133,18 @@ class TranscriptionProcessor(Thread):
     transcription_queue = None
     thread_count = 2
     stop_event = None
-    ai_client = None
-    assistant_id = None
 
     def __init__(
         self,
         transcription_queue: Queue,
-        ai_client: OpenAI,
-        assistant_id: str,
+        ai_helper: AIHelper,
         message_queue: Queue,
         action_queue: Queue,
     ):
         Thread.__init__(self)
         self.transcription_queue = transcription_queue
         self.stop_event = ThreadingEvent()
-        self.ai_helper = AIHelper(ai_client, assistant_id)
+        self.ai_helper = ai_helper
         self.thread_count = 2
         self.message_queue = message_queue
         self.action_queue = action_queue

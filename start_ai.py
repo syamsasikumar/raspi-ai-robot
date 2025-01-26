@@ -5,6 +5,7 @@ import speech_recognition as sr
 import whisper
 from dotenv import load_dotenv
 from openai import OpenAI
+from ai_helper import AIHelper
 
 from ai import (ActionHandler, MessageHandler, Transcriber,
                 TranscriptionProcessor)
@@ -42,6 +43,8 @@ def main():
     action_queue = Queue()  # queue to hold actions for robot
     message_queue = Queue()  # queue to hold messages for robot to speak
     robot_client = RobotClient(rpc_channel)
+    openai = OpenAI(api_key=api_key, timeout=30)
+    ai_helper = AIHelper(openai, assistant_id)
 
     transcriber = Transcriber(
         transcription_queue,
@@ -55,8 +58,7 @@ def main():
     )
     transcription_processor = TranscriptionProcessor(
         transcription_queue,
-        OpenAI(api_key=api_key, timeout=30),
-        assistant_id,
+        ai_helper,
         message_queue,
         action_queue,
     )

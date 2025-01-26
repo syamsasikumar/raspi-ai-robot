@@ -24,7 +24,7 @@ class RobotServer(RobotServicer):
         openai = OpenAI(api_key=api_key, timeout=30)
         self.ai_helper = AIHelper(openai, assistant_id)
         self.robot_movement = RobotMovement()
-        self.robot_sound_out = RobotSoundOut(music,openai)
+        self.robot_sound_out = RobotSoundOut(music,self.ai_helper)
         self.robot_camera = RobotCamera(camera)
         print("RobotServer initialized")
 

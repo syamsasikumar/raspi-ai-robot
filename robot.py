@@ -8,9 +8,9 @@ import readchar
 import pyaudio
 from picamera2 import Picamera2
 from picarx import Picarx
-from robot_hat import TTS, Music
+from robot_hat import Music
 from vilib import Vilib
-from openai import OpenAI
+from ai_helper import AIHelper
 
 from menu import show_sound_menu
 
@@ -141,11 +141,9 @@ class RobotSoundOut:
     music = None
     flag_bgm = False
 
-    def __init__(self, music: Music, ai_client:OpenAI):
+    def __init__(self, music: Music, ai_helper:AIHelper):
         self.music = music
-        self.ai_client = ai_client
-        self.player_stream = pyaudio.PyAudio().open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
-
+        self.ai_helper = ai_helper
 
     def play_music(self):
         self.flag_bgm = not self.flag_bgm
@@ -177,23 +175,14 @@ class RobotSoundOut:
                 break
             else:
                 sentence += char
-        self.speak_with_ai(sentence)
+        self.speak_using_ai(sentence)
 
     def stop_music(self):
         if self.flag_bgm is True:
             self.music.music_stop()
 
-    def speak_with_ai(self, text: str):
-        if self.ai_client is None:
-            raise Exception("client not initialized to speak with AI")
-        with self.ai_client.audio.speech.with_streaming_response.create(
-            model="tts-1",
-            voice="nova",
-            response_format="pcm",
-            input=text,
-        ) as response:
-            for chunk in response.iter_bytes(chunk_size=1024):
-                self.player_stream.write(chunk)
+    def speak_using_ai(self, text: str):
+        self.ai_helper.speak_using_ai(text)
 
 
 class RobotCamera:
