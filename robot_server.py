@@ -24,7 +24,7 @@ class RobotServer(RobotServicer):
         openai = OpenAI(api_key=api_key, timeout=30)
         self.ai_helper = AIHelper(openai, assistant_id)
         self.robot_movement = RobotMovement()
-        self.robot_sound_out = RobotSoundOut(music,self.ai_helper)
+        self.robot_sound_out = RobotSoundOut(music, self.ai_helper)
         self.robot_camera = RobotCamera(camera)
         print("RobotServer initialized")
 
@@ -42,7 +42,7 @@ class RobotServer(RobotServicer):
         self.robot_sound_out.speak_using_ai(str("".join(message)))
         # todo
         return RobotReply(reply="message spoken")
-    
+
     def _perform_action(self, action: str, ignore_see: bool = False):
         if action == "move forward":
             self.robot_movement.forward()
@@ -74,9 +74,7 @@ class RobotServer(RobotServicer):
             print("saying.." + str(response["answer"]))
             self.robot_sound_out.speak_using_ai(str("".join(response["answer"])))
         if "actions" not in response and "answer" not in response:
-            print(
-                "no answer or action found in response " + response
-            )
+            print("no answer or action found in response " + response)
 
 
 if __name__ == "__main__":

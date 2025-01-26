@@ -9,8 +9,7 @@ from robot_hat import Music
 from vilib import Vilib
 
 from ai_helper import AIHelper
-from menu import (show_camera_menu, show_main_menu, show_move_menu,
-                  show_sound_menu)
+from menu import show_camera_menu, show_main_menu, show_move_menu, show_sound_menu
 from robot import RobotCamera, RobotMovement, RobotSoundOut
 
 if geteuid() != 0:
@@ -25,6 +24,7 @@ api_key = os.getenv("OPENAI_API_KEY")
 assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
 openai = OpenAI(api_key=api_key, timeout=30)
 ai_helper = AIHelper(openai, assistant_id)
+
 
 def move_options_cli():
     try:
@@ -94,9 +94,7 @@ def camera_options_cli():
             if "answer" in response:
                 print("saying.." + str(response["answer"]))
             if "actions" not in response and "answer" not in response:
-                print(
-                    "no answer or action found in response " + response
-                )
+                print("no answer or action found in response " + response)
         sleep(0.5)
 
 

@@ -164,20 +164,15 @@ class TranscriptionProcessor(Thread):
     def fetch_and_queue_ai_response(self, message: str):
         response = self.ai_helper.converse_with_text(message)
         mute_message = False
-        if 'see' in response['actions']:
+        if "see" in response["actions"]:
             mute_message = True
         if "actions" in response:
             print("saying.." + str(response["actions"]))
             self.action_queue.put(response["actions"])
         if "answer" in response and not mute_message:
             self.message_queue.put(response["answer"])
-        if (
-            "actions" not in response
-            and "answer" not in response
-        ):
-            print(
-                "no answer or action found in response " + response
-            )
+        if "actions" not in response and "answer" not in response:
+            print("no answer or action found in response " + response)
 
     def stop(self):
         self.stop_event.set()

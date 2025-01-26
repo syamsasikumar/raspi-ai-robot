@@ -13,7 +13,13 @@ class AIHelper:
         self.ai_client = ai_client
         self.assistant_id = assistant_id
         self.chat_thread = self.ai_client.beta.threads.create()
-        self.player_stream = pyaudio.PyAudio().open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
+        self.player_stream = pyaudio.PyAudio().open(
+            format=pyaudio.paInt16,
+            channels=1,
+            rate=24000,
+            output=True,
+            output_device_index=2,
+        )
 
     def converse_with_text(self, imput_text: str):
         print("conversing with AI..")
@@ -29,22 +35,15 @@ class AIHelper:
     def converse_with_image(self, imput_text: str, image_path: str):
         print("uploading image..")
         img_file = self.ai_client.files.create(
-                    file=open(image_path, "rb"),
-                    purpose="vision"
-                )
+            file=open(image_path, "rb"), purpose="vision"
+        )
         print("creating thread..")
         self.ai_client.beta.threads.messages.create(
-            thread_id= self.chat_thread.id,
+            thread_id=self.chat_thread.id,
             role="user",
-            content= [
-                {
-                    "type": "text",
-                    "text": imput_text
-                },
-                {
-                    "type": "image_file",
-                    "image_file": {"file_id": img_file.id}
-                }
+            content=[
+                {"type": "text", "text": imput_text},
+                {"type": "image_file", "image_file": {"file_id": img_file.id}},
             ],
         )
         print("conversing with AI..")
@@ -53,7 +52,7 @@ class AIHelper:
             assistant_id=self.assistant_id,
         )
         return self._parse_response(run)
-    
+
     def _parse_response(self, run):
         if run.status == "completed":
             messages = self.ai_client.beta.threads.messages.list(

@@ -7,8 +7,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from ai_helper import AIHelper
 
-from ai import (ActionHandler, MessageHandler, Transcriber,
-                TranscriptionProcessor)
+from ai import ActionHandler, MessageHandler, Transcriber, TranscriptionProcessor
 from robot_client import RobotClient
 
 

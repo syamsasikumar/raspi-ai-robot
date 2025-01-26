@@ -24,6 +24,7 @@ class RobotServer(RobotServicer):
         # todo
         return RobotReply(reply="message spoken")
 
+
 if __name__ == "__main__":
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     robot_server = RobotServer()

@@ -82,58 +82,58 @@ class RobotMovement:
         self.robot.reset()
         for i in range(5):
             self.robot.set_dir_servo_angle(-6)
-            sleep(.5)
+            sleep(0.5)
             self.robot.set_dir_servo_angle(6)
-            sleep(.5)
+            sleep(0.5)
         self.robot.reset()
 
     def think(self):
         self.robot.reset()
 
         for i in range(11):
-            self.robot.set_cam_pan_angle(i*3)
-            self.robot.set_cam_tilt_angle(-i*2)
-            self.robot.set_dir_servo_angle(i*2)
-            sleep(.05)
+            self.robot.set_cam_pan_angle(i * 3)
+            self.robot.set_cam_tilt_angle(-i * 2)
+            self.robot.set_dir_servo_angle(i * 2)
+            sleep(0.05)
         sleep(1)
         self.robot.set_cam_pan_angle(15)
         self.robot.set_cam_tilt_angle(-10)
         self.robot.set_dir_servo_angle(10)
-        sleep(.1)
+        sleep(0.1)
         self.robot.reset()
 
     def shake_head(self):
         self.robot.stop()
         self.robot.set_cam_pan_angle(0)
         self.robot.set_cam_pan_angle(60)
-        sleep(.2)
+        sleep(0.2)
         self.robot.set_cam_pan_angle(-50)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_pan_angle(40)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_pan_angle(-30)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_pan_angle(20)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_pan_angle(-10)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_pan_angle(10)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_pan_angle(-5)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_pan_angle(0)
 
     def nod(self):
         self.robot.reset()
         self.robot.set_cam_tilt_angle(0)
         self.robot.set_cam_tilt_angle(5)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_tilt_angle(-30)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_tilt_angle(5)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_tilt_angle(-30)
-        sleep(.1)
+        sleep(0.1)
         self.robot.set_cam_tilt_angle(0)
 
 
@@ -141,7 +141,7 @@ class RobotSoundOut:
     music = None
     flag_bgm = False
 
-    def __init__(self, music: Music, ai_helper:AIHelper):
+    def __init__(self, music: Music, ai_helper: AIHelper):
         self.music = music
         self.ai_helper = ai_helper
 
