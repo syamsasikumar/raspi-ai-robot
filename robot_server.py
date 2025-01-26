@@ -23,10 +23,10 @@ class RobotServer(RobotServicer):
         music.music_set_volume(80)
         tts.lang("en-US")
         camera = Picamera2()
-        self.robot_movement = RobotMovement()
-        self.robot_sound_out = RobotSoundOut(music, tts)
-        self.robot_camera = RobotCamera(camera)
         self.ai_helper = AIHelper(OpenAI(api_key=api_key, timeout=30), assistant_id)
+        self.robot_movement = RobotMovement()
+        self.robot_sound_out = RobotSoundOut(music, tts, self.ai_helper)
+        self.robot_camera = RobotCamera(camera)
         print("RobotServer initialized")
 
     def PerformAction(self, request, context):
@@ -40,7 +40,7 @@ class RobotServer(RobotServicer):
     def SayMessage(self, request, context):
         message = request.message
         print("".join(message))
-        self.robot_sound_out.speak(str("".join(message)))
+        self.robot_sound_out.speak_with_ai(str("".join(message)))
         # todo
         return RobotReply(reply="message spoken")
     
@@ -73,7 +73,7 @@ class RobotServer(RobotServicer):
                 self._perform_action(action, ignore_see=True)
         if "answer" in response:
             print("saying.." + str(response["answer"]))
-            self.robot_sound_out.speak(str("".join(response["answer"])))
+            self.robot_sound_out.speak_with_ai(str("".join(response["answer"])))
         if "actions" not in response and "answer" not in response:
             print(
                 "no answer or action found in response " + response
