@@ -75,7 +75,7 @@ class AIHelper:
                                 print("cannot parse AI response :" + value + ":" + e)
                     break
 
-    def speak_with_ai(self, text: str):
+    def speak_using_ai(self, text: str):
         if self.ai_client is None:
             raise Exception("client not initialized to speak with AI")
         with self.ai_client.audio.speech.with_streaming_response.create(
