@@ -62,6 +62,7 @@ class RobotServer(RobotServicer):
             self._capture_and_process_image("what do you see in this image?")
 
     def _capture_and_process_image(self, message: str):
+        self.robot_sound_out.speak_using_ai("opening my eyes to see! hold on..")
         print("capturing image..")
         image_path = self.robot_camera.take_photo()
         print("sending image for processing..")
