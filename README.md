@@ -22,7 +22,7 @@ NOTE - since running whisper locally on my Raspberry pi is not performant, the s
 
 ## How can I run this?
 To run in "voice" input mode -
-* Install necessary python modules on rpi and the remote machine for running transcription service
+* Install necessary python modules on rpi and the remote machine for running transcription service (see `requirements.txt` and Sunfounder's documentation from the link above)
 * create `.env` file (Check `.env.example`) to set environment properties
 * Run `start_ai.py` on the remote machine to run the local transcription service
 * Run `robot_server.py` on rpi
