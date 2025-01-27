@@ -14,7 +14,7 @@ Think Alexa on wheels - the robot is capable of
 ## How does it work?
 At a high level it can be broken down into 
 - Chat Engine - uses AI to transcribe incoming speech from a user, breaks it down into `actions` for robot to perform and `answers` for robot voice responses. 
-- Robot controller - uses Sunfounder's python modules to interface with the peripherals on robot hat (servos, camera etc) and perform actions. Also uses AI to respond with a natural sounding voice.
+- Robot Controller - uses Sunfounder's python modules to interface with the peripherals on robot hat (servos, camera etc) and perform actions. Also uses AI to respond with a natural sounding voice.
 - Robot Server - grpc interface for invoking remote instructions for the robot
 <img width="880" alt="Screenshot 2025-01-26 at 6 19 53 PM" src="https://github.com/user-attachments/assets/eec82f15-335d-4b38-be62-289522ec123a" />
 
