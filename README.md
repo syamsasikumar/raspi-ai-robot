@@ -21,11 +21,14 @@ At a high level it can be broken down into
 NOTE - since running whisper locally on my Raspberry pi is not performant, the speech engine needs to run on a separate machine with adequate resources. The `robot_server` module which runs locally on the pi can be used to interface with the robot.
 
 ## How can I run this?
-To run in "voice" input mode -
+One time setup - 
 * Install necessary python modules on rpi and the remote machine for running transcription service (see `requirements.txt` and Sunfounder's documentation from the link above)
-* create `.env` file (Check `.env.example`) to set environment properties
+* create `.env` file (check `.env.example`) to set environment properties
+
+To run in "voice" input mode -
 * Run `start_ai.py` on the remote machine to run the local transcription service
 * Run `robot_server.py` on rpi
 * profit!
 
-A "cli" input mode is also available with elementary functions - can be invoked using `start_cli.py` on rpi
+A "cli" input mode is also available with elementary functions -
+* Run `start_cli.py` on rpi
