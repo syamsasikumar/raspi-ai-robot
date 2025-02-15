@@ -35,7 +35,7 @@ if __name__ == "__main__":
     rpc_channel = get_rpc_channel()
     print(rpc_channel)
     robot_client = RobotClient(rpc_channel)
-    robot_client.perform_action(["see"])
+    robot_client.perform_action(["free_roam"])
     robot_client.say_message(
         "Hello there! Beep boop! Im Max, the little robot ready to roll into action! How can I assist you today?"
     )

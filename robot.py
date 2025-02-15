@@ -10,8 +10,6 @@ from picamera2 import Picamera2
 from picarx import Picarx
 from robot_hat import Music
 from vilib import Vilib
-from ultrasonic import Ultrasonic
-from pin import Pin
 from ai_helper import AIHelper
 
 from menu import show_sound_menu
@@ -21,7 +19,7 @@ class RobotMovement:
     robot = None
     tile_angle = 0
     pan_angle = 0
-    ROAM_FORWARD_UNIT = 50
+    FORWARD_ROAM_UNIT = 50
     # > 40 safe
     # > 20 && < 40 turn around, 
     # < 20 backward
@@ -30,10 +28,7 @@ class RobotMovement:
     in_free_roam = False
 
     def __init__(self):
-        self.robot = Picarx()
-        trig_pin = Pin("D2")
-        echo_pin = Pin("D3")
-        self.sonar = Ultrasonic(trig_pin, echo_pin)
+        self.robot = Picarx(ultrasonic_pins=['D2','D3'])
 
     def forward(self):
         self.robot.set_dir_servo_angle(0)
@@ -156,18 +151,18 @@ class RobotMovement:
             return
         self.in_free_roam = True
         while self.in_free_roam:
-            distance = self.sonar.read()
+            distance = round(self.robot.ultrasonic.read(), 2)
             print("distance: ",distance)
             if distance >= self.SAFEDISTANCE:
                 self.robot.set_dir_servo_angle(0)
-                self.robot.forward(self.ROAM_FORWARD_UNIT)
+                self.robot.forward(self.FORWARD_ROAM_UNIT)
             elif distance >= self.DANGERDISTANCE:
                 self.robot.set_dir_servo_angle(30)
-                self.robot.forward(self.ROAM_FORWARD_UNIT)
+                self.robot.forward(self.FORWARD_ROAM_UNIT)
                 time.sleep(0.1)
             else:
                 self.robot.set_dir_servo_angle(-30)
-                self.robot.backward(self.ROAM_FORWARD_UNIT)
+                self.robot.backward(self.FORWARD_ROAM_UNIT)
                 time.sleep(0.5)
 
     def stop_free_roam_movement(self):
