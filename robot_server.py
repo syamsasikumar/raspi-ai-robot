@@ -2,6 +2,7 @@ import os
 from concurrent import futures
 
 import grpc
+import threading
 from dotenv import load_dotenv
 from openai import OpenAI
 from picamera2 import Picamera2
@@ -56,10 +57,27 @@ class RobotServer(RobotServicer):
             self.robot_sound_out.play_music()
         elif action == "stop music":
             self.robot_sound_out.stop_music()
+        elif action == "free roam":
+            self._start_free_roam()
+        elif action == "stop free roam":
+            self._stop_free_roam()
         elif action == "honk":
             self.robot_sound_out.play_sound_effect()
         elif action == "see" and not ignore_see:
             self._capture_and_process_image("what do you see in this image?")
+
+    def _start_free_roam(self):
+        if self.robot_movement.is_in_free_roam_mode():
+            return
+        self.robot_sound_out.speak_using_ai("I am about to go on an adventure! hold on..")
+        free_roam_thread = threading.Thread(target=self.robot_movement.start_free_roam_movement)
+        free_roam_thread.start()
+
+    def _stop_free_roam(self):
+        if not self.robot_movement.is_in_free_roam_mode():
+            return
+        self.robot_sound_out.speak_using_ai("Alright! I will stop now..")
+        self.robot_movement.stop_free_roam_movement()
 
     def _capture_and_process_image(self, message: str):
         self.robot_sound_out.speak_using_ai("opening my eyes to see! hold on..")

@@ -1,6 +1,8 @@
 import json
 import pyaudio
+import os
 
+from dotenv import load_dotenv
 from openai import OpenAI
 
 
@@ -10,16 +12,32 @@ class AIHelper:
         ai_client: OpenAI,
         assistant_id: str,
     ):
+        load_dotenv()
+        output_device_index = os.getenv("SOUND_OUT_DEVICE_INDEX", 1)
         self.ai_client = ai_client
         self.assistant_id = assistant_id
         self.chat_thread = self.ai_client.beta.threads.create()
+        # use the printed response to set the right device index in .env
+        self._print_audio_devices()
         self.player_stream = pyaudio.PyAudio().open(
             format=pyaudio.paInt16,
             channels=1,
             rate=24000,
             output=True,
-            output_device_index=2,
+            output_device_index=int(output_device_index),
         )
+    
+    def _print_audio_devices(self):
+        info = pyaudio.PyAudio().get_host_api_info_by_index(0)
+        numdevices = info.get('deviceCount')
+
+        for i in range(0, numdevices):
+                if (pyaudio.PyAudio().get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
+                    print("Input Device id ", i, " - ", pyaudio.PyAudio().get_device_info_by_host_api_device_index(0, i).get('name'))
+
+                if (pyaudio.PyAudio().get_device_info_by_host_api_device_index(0, i).get('maxOutputChannels')) > 0:
+                    print("Output Device id ", i, " - ", pyaudio.PyAudio().get_device_info_by_host_api_device_index(0, i).get('name'))
+
 
     def converse_with_text(self, imput_text: str):
         print("conversing with AI..")

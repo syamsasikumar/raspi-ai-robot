@@ -19,6 +19,13 @@ class RobotMovement:
     robot = None
     tile_angle = 0
     pan_angle = 0
+    POWER = 50
+    # > 40 safe
+    # > 20 && < 40 turn around, 
+    # < 20 backward
+    DANGERDISTANCE = 20
+    SAFEDISTANCE = 40
+    in_free_roam = False
 
     def __init__(self):
         self.robot = Picarx()
@@ -135,6 +142,34 @@ class RobotMovement:
         self.robot.set_cam_tilt_angle(-30)
         sleep(0.1)
         self.robot.set_cam_tilt_angle(0)
+
+    def is_in_free_roam_mode(self):
+        return self.in_free_roam
+
+    def start_free_roam_movement(self):
+        if self.in_free_roam:
+            return
+        self.in_free_roam = True
+        while self.in_free_roam:
+            distance = round(self.robot.ultrasonic.read(), 2)
+            print("distance: ",distance)
+            if distance >= self.SAFEDISTANCE:
+                self.robot.set_dir_servo_angle(0)
+                self.robot.forward(self.POWER)
+            elif distance >= self.DANGERDISTANCE:
+                self.robot.set_dir_servo_angle(30)
+                self.robot.forward(self.POWER)
+                time.sleep(0.1)
+            else:
+                self.robot.set_dir_servo_angle(-30)
+                self.robot.backward(self.POWER)
+                time.sleep(0.5)
+
+    def stop_free_roam_movement(self):
+        self.in_free_roam = False
+        self.robot.forward(0)
+        self.robot.set_dir_servo_angle(0)
+        self.robot.stop()
 
 
 class RobotSoundOut:
