@@ -154,16 +154,20 @@ class RobotMovement:
             distance = round(self.robot.ultrasonic.read(), 2)
             print("distance: ",distance)
             if distance >= self.SAFEDISTANCE:
+                print("Safe distance")
                 self.robot.set_dir_servo_angle(0)
                 self.robot.forward(self.FORWARD_ROAM_UNIT)
+                sleep(0.1)
             elif distance >= self.DANGERDISTANCE:
+                print("Turn around")
                 self.robot.set_dir_servo_angle(30)
                 self.robot.forward(self.FORWARD_ROAM_UNIT)
-                time.sleep(0.1)
+                sleep(0.1)
             else:
+                print("Backward")
                 self.robot.set_dir_servo_angle(-30)
                 self.robot.backward(self.FORWARD_ROAM_UNIT)
-                time.sleep(0.5)
+                sleep(0.5)
 
     def stop_free_roam_movement(self):
         self.in_free_roam = False
